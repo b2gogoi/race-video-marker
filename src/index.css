@@ -69,6 +69,35 @@
     .analyzer-card {
       background: var(--card-bg);
     }
+    .bookmarks-sidebar {
+      align-self: start;
+      max-height: calc(100vh - 32px);
+      overflow: auto;
+      padding: 12px;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .bookmark-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .bookmark-empty {
+      color: var(--text-muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .bookmark-frame-button {
+      width: 100%;
+      color: var(--accent);
+      font-family: "Courier New", Courier, monospace;
+      text-align: center;
+    }
+    .bookmark-trigger {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
     .video-viewport {
       position: relative;
       background: #000;

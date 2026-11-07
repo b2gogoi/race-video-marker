@@ -10,6 +10,7 @@ export function initializeAnalyzer() {
   const audioPlayhead = document.getElementById('audioPlayhead');
   const audioStatus = document.getElementById('audioStatus');
   const markersTbody = document.getElementById('markersTbody');
+  const frameBookmarksList = document.getElementById('frameBookmarksList');
   
   const rangeStartLabel = document.getElementById('rangeStartLabel');
   const rangeEndLabel = document.getElementById('rangeEndLabel');
@@ -383,6 +384,26 @@ export function initializeAnalyzer() {
     refreshTimelineBounds();
     renderWaveform();
     syncUI(vid.currentTime);
+  });
+
+  document.getElementById('btnBookmarkFrame').addEventListener('click', () => {
+    if (!vid.src || !vid.duration) return;
+
+    const frameIndex = activeFrameIndex;
+    document.getElementById('emptyBookmarksMessage')?.remove();
+
+    const bookmark = document.createElement('button');
+    bookmark.type = 'button';
+    bookmark.className = 'bookmark-frame-button';
+    bookmark.textContent = `#${frameIndex}`;
+    bookmark.setAttribute('aria-label', `Seek to frame ${frameIndex}`);
+    bookmark.addEventListener('click', () => {
+      vid.pause();
+      document.getElementById('btnPlayPause').textContent = 'Play';
+      requestFrameSeek(frameIndex);
+    });
+
+    frameBookmarksList.appendChild(bookmark);
   });
 
   // Waveform Interaction

@@ -7,7 +7,7 @@ export default function App() {
   }, []);
 
   return (
-<div className="analyzer-workspace grid w-full min-h-screen grid-cols-[290px_minmax(0,1fr)] gap-4 max-w-[1380px]">
+<div className="analyzer-workspace grid w-full min-h-screen grid-cols-[290px_minmax(0,1fr)_110px] gap-4 max-w-[1380px]">
   {/*Left Column: File & Stream Details*/}
   <div className="meta-sidebar flex flex-col gap-[14px] rounded-[10px] border border-[#242e3d] p-4 text-xs">
     <div>
@@ -132,6 +132,7 @@ export default function App() {
       <button id="btnSetOut" className="warn">Set OUT ]</button>
       <button id="btnToggleZoom">Zoom to Range</button>
       <button id="btnResetRange">Reset Range</button>
+      <button id="btnBookmarkFrame" className="bookmark-trigger">Bookmark Frame</button>
 
       <button id="btnSetStart" style={{ borderColor: "#f59e0b", color: "#f59e0b", fontWeight: "600" }}>Set Start (T=0) [S]</button>
       <button id="btnAddMarker">Mark Event ▾</button>
@@ -153,6 +154,13 @@ export default function App() {
       </table>
     </div>
   </div>
+
+  <aside className="bookmarks-sidebar" aria-label="Frame bookmarks">
+    <div className="meta-section-title">Frame Bookmarks</div>
+    <div id="frameBookmarksList" className="bookmark-list" aria-live="polite">
+      <span id="emptyBookmarksMessage" className="bookmark-empty">No bookmarks yet</span>
+    </div>
+  </aside>
 </div>
   );
 }
