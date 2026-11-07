@@ -11,6 +11,8 @@ export function initializeAnalyzer() {
   const audioStatus = document.getElementById('audioStatus');
   const markersTbody = document.getElementById('markersTbody');
   const frameBookmarksList = document.getElementById('frameBookmarksList');
+  const btnSetIn = document.getElementById('btnSetIn');
+  const btnSetOut = document.getElementById('btnSetOut');
   
   const rangeStartLabel = document.getElementById('rangeStartLabel');
   const rangeEndLabel = document.getElementById('rangeEndLabel');
@@ -38,6 +40,8 @@ export function initializeAnalyzer() {
 
   let rangeInSeconds = 0.0;
   let rangeOutSeconds = 0.0;
+  let isInPointSet = false;
+  let isOutPointSet = false;
   let isZoomedToRange = false;
 
   let activeFrameIndex = 0;
@@ -159,6 +163,8 @@ export function initializeAnalyzer() {
   vid.addEventListener('loadedmetadata', () => {
     rangeInSeconds = 0.0;
     rangeOutSeconds = vid.duration;
+    isInPointSet = false;
+    isOutPointSet = false;
     metaDuration.textContent = `${vid.duration.toFixed(3)}s`;
 
     // Compute Resolution & Aspect Ratio
@@ -204,6 +210,12 @@ export function initializeAnalyzer() {
 
     rangeStartLabel.textContent = `${minSec.toFixed(3)}s [IN]`;
     rangeEndLabel.textContent = `${maxSec.toFixed(3)}s [OUT]`;
+    btnSetIn.textContent = isInPointSet
+      ? `Set IN [ #${Math.round(rangeInSeconds * fps)}`
+      : 'Set IN [';
+    btnSetOut.textContent = isOutPointSet
+      ? `Set OUT ] #${Math.round(rangeOutSeconds * fps)}`
+      : 'Set OUT ]';
   }
 
   // Non-stalling Serialized Frame Seeker
@@ -344,21 +356,31 @@ export function initializeAnalyzer() {
 
   // Range Focus Trimming
   function setInPoint() {
+    if (!vid.duration || !Number.isFinite(vid.currentTime)) return;
     rangeInSeconds = vid.currentTime;
-    if (rangeInSeconds >= rangeOutSeconds) rangeOutSeconds = vid.duration;
+    isInPointSet = true;
+    if (rangeInSeconds >= rangeOutSeconds) {
+      rangeOutSeconds = vid.duration;
+      isOutPointSet = false;
+    }
     refreshTimelineBounds();
     if (isZoomedToRange) renderWaveform();
   }
 
   function setOutPoint() {
+    if (!vid.duration || !Number.isFinite(vid.currentTime)) return;
     rangeOutSeconds = vid.currentTime;
-    if (rangeOutSeconds <= rangeInSeconds) rangeInSeconds = 0.0;
+    isOutPointSet = true;
+    if (rangeOutSeconds <= rangeInSeconds) {
+      rangeInSeconds = 0.0;
+      isInPointSet = false;
+    }
     refreshTimelineBounds();
     if (isZoomedToRange) renderWaveform();
   }
 
-  document.getElementById('btnSetIn').addEventListener('click', setInPoint);
-  document.getElementById('btnSetOut').addEventListener('click', setOutPoint);
+  btnSetIn.addEventListener('click', setInPoint);
+  btnSetOut.addEventListener('click', setOutPoint);
 
   document.getElementById('btnToggleZoom').addEventListener('click', () => {
     if (rangeOutSeconds <= rangeInSeconds) {
@@ -378,6 +400,8 @@ export function initializeAnalyzer() {
     isZoomedToRange = false;
     rangeInSeconds = 0.0;
     rangeOutSeconds = vid.duration;
+    isInPointSet = false;
+    isOutPointSet = false;
     document.getElementById('btnToggleZoom').textContent = "Zoom to Range";
     zoomStatusLabel.textContent = "Full Video Mode";
     zoomStatusLabel.style.color = "var(--accent)";
