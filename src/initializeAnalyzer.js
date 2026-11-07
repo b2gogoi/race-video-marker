@@ -392,17 +392,44 @@ export function initializeAnalyzer() {
     const frameIndex = activeFrameIndex;
     document.getElementById('emptyBookmarksMessage')?.remove();
 
-    const bookmark = document.createElement('button');
-    bookmark.type = 'button';
-    bookmark.className = 'bookmark-frame-button';
-    bookmark.textContent = `#${frameIndex}`;
-    bookmark.setAttribute('aria-label', `Seek to frame ${frameIndex}`);
-    bookmark.addEventListener('click', () => {
+    const bookmark = document.createElement('div');
+    bookmark.className = 'bookmark-row';
+
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'bookmark-remove-button';
+    removeButton.textContent = '×';
+    removeButton.setAttribute('aria-label', `Remove bookmark for frame ${frameIndex}`);
+    removeButton.addEventListener('click', () => {
+      bookmark.remove();
+      if (!frameBookmarksList.querySelector('.bookmark-row')) {
+        const emptyMessage = document.createElement('span');
+        emptyMessage.id = 'emptyBookmarksMessage';
+        emptyMessage.className = 'bookmark-empty';
+        emptyMessage.textContent = 'No bookmarks yet';
+        frameBookmarksList.appendChild(emptyMessage);
+      }
+    });
+
+    const labelInput = document.createElement('input');
+    labelInput.type = 'text';
+    labelInput.className = 'bookmark-label-input';
+    labelInput.maxLength = 120;
+    labelInput.placeholder = 'Label this frame';
+    labelInput.setAttribute('aria-label', `Label for frame ${frameIndex}`);
+
+    const seekButton = document.createElement('button');
+    seekButton.type = 'button';
+    seekButton.className = 'bookmark-frame-button';
+    seekButton.textContent = `#${frameIndex}`;
+    seekButton.setAttribute('aria-label', `Seek to frame ${frameIndex}`);
+    seekButton.addEventListener('click', () => {
       vid.pause();
       document.getElementById('btnPlayPause').textContent = 'Play';
       requestFrameSeek(frameIndex);
     });
 
+    bookmark.append(removeButton, labelInput, seekButton);
     frameBookmarksList.appendChild(bookmark);
   });
 

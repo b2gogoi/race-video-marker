@@ -81,7 +81,25 @@
     .bookmark-list {
       display: flex;
       flex-direction: column;
+      gap: 8px;
+    }
+    .bookmark-row {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
       gap: 6px;
+      align-items: center;
+    }
+    .bookmark-label-input {
+      width: 100%;
+      min-width: 0;
+      cursor: text;
+      font-size: 12px;
+    }
+    .bookmark-remove-button {
+      padding: 4px 6px;
+      color: #ff7b72;
+      font-size: 16px;
+      line-height: 1;
     }
     .bookmark-empty {
       color: var(--text-muted);
@@ -89,7 +107,6 @@
       line-height: 1.5;
     }
     .bookmark-frame-button {
-      width: 100%;
       color: var(--accent);
       font-family: "Courier New", Courier, monospace;
       text-align: center;

@@ -7,7 +7,7 @@ export default function App() {
   }, []);
 
   return (
-<div className="analyzer-workspace grid w-full min-h-screen grid-cols-[290px_minmax(0,1fr)_110px] gap-4 max-w-[1380px]">
+<div className="analyzer-workspace grid w-full min-h-screen grid-cols-[290px_minmax(0,1fr)_270px] gap-4 max-w-[1380px]">
   {/*Left Column: File & Stream Details*/}
   <div className="meta-sidebar flex flex-col gap-[14px] rounded-[10px] border border-[#242e3d] p-4 text-xs">
     <div>
